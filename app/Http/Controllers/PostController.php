@@ -51,7 +51,12 @@ class PostController extends Controller
         echo "#{$post->id}<h3>Titulo : {$post->title}</h3>";
         echo "<p>Subtitulo: {$post->subtitle} </p>";
         echo "<p>Conteúdo: {$post->description} </p>";
+        // formatação vinda de Post.php, da função getCreatedFormatAttribute()
+        echo "<p>Data de criação: {$post->createdFormat} </p>"; 
         echo "<hr>";
+
+        // $post->title = 'Título de Opção Secundária !';
+        // $post->save();
 
         $postAuthor = $post->author()->get()->first();
 
@@ -59,6 +64,33 @@ class PostController extends Controller
             echo "<h1>Dados do Usuário</h1><br>";
             echo "<p>Nome do usuario : {$postAuthor->name}</p>";
             echo "<p>Email do usuario : {$postAuthor->email}</p>";
+        }
+
+        $postCategories = $post->categories()->get();
+
+        if($postCategories){
+            echo "<h1>Categorias</h1>";
+            foreach ($postCategories as $postCategory) {
+                echo "<h2>Categoria : {$postCategory->name} (id:{$postCategory->id})</h2>";
+            }
+        }
+
+        //$post->categories()->attach([3]);
+        //$post->categories()->detach([3]);
+        //$post->categories()->sync([5,10]);
+        //$post->categories()->syncWithoutDetaching([5,6,7]);
+        
+        // $post->comments()->create([
+        //     'content' => 'Comentario uhull'
+        // ]);
+
+        $comments = $post->comments()->get();
+        if($comments){
+            echo "<h1>Comentários</h1>";
+            foreach ($comments as $comment) {
+                echo "Comentario: {$comment->content}";
+                echo "<hr>";
+            }
         }
     }
 

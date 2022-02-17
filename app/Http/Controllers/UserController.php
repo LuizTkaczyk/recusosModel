@@ -54,7 +54,7 @@ class UserController extends Controller
 
         $userAddress = $user->addressDelivery()->get()->first();
 
-        if($userAddress){
+        if ($userAddress) {
             echo "<h1>Endereço de entrega</h1>";
             echo "<p>Endereço completo : {$userAddress->address} , nº {$userAddress->number} - cep: {$userAddress->zipcode}</p>";
             echo "<p>Cidade: {$userAddress->city} - UF: {$userAddress->state}</p>";
@@ -86,27 +86,59 @@ class UserController extends Controller
         // dd($users);
 
         $posts = $user->posts()->orderBy('id', 'desc')->get();
-       // dd($posts);
-        if($posts){
+        // dd($posts);
+        if ($posts) {
             echo "<h1>Artigos</h1>";
-          
+
             foreach ($posts as $post) {
                 echo "#{$post->id}<h3>Titulo : {$post->title}</h3>";
                 echo "<p>Subtitulo: {$post->subtitle} </p>";
                 echo "<p>Conteúdo: {$post->description} </p>";
                 echo "<hr>";
-             
             }
         }
 
 
-        $comments = $user->commentsOnMyPosts()->get();
-        echo "<h1>Comentarios nos meus artigos</h1>";
+        // $comments = $user->commentsOnMyPosts()->get();
+        // echo "<h1>Comentarios nos meus artigos</h1>";
 
-        foreach ($comments as $comment) {
-            echo "<span>Usuario {$comment->user} disse no artigo {$comment->post}:</span>";
-            echo "<p>Comentario: {$comment->content} </p>";
-            echo "<hr>";
+        // foreach ($comments as $comment) {
+        //     echo "<span>Usuario {$comment->user} disse no artigo {$comment->post}:</span>";
+        //     echo "<p>Comentario: {$comment->content} </p>";
+        //     echo "<hr>";
+        // }
+
+        $user->comments()->create([
+            'content' => 'Comentario do usuario'
+        ]);
+
+        $comments = $user->comments()->get();
+        if ($comments) {
+            echo "<h1>Comentários</h1>";
+            foreach ($comments as $comment) {
+                echo "Comentario: {$comment->content}";
+                echo "<hr>";
+            }
+        }
+        // studens e admin estão vindo de User.php, a palavra scope é abstraida pelo laravel e é declarada aqui com a inicial minuscula
+        $students = User::students()->get();
+        if ($students) {
+            echo "<h1>Alunos</h1>";
+            foreach ($students as $student) {
+                echo "<h4>Nome do aluno: {$student->name}</h4>";
+                echo "<h4>Email: {$student->email}</h4>";
+                echo "<hr>";
+            }
+        }
+
+        $admins = User::admins()->get();
+        if ($admins) {
+            echo "<h1>Administradores</h1>";
+            foreach ($admins as $admin) {
+                echo "<h4>Nome do Admin: {$admin->name}</h4>";
+                echo "<h4>Email: {$admin->email}</h4>";
+                echo "<hr>";
+            }
         }
     }
 
