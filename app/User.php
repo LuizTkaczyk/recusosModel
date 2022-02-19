@@ -11,6 +11,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $appends = ['admin'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,7 +28,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token','level'
+    ];
+
+    protected $visible = [
+        'name', 'email','admin'
     ];
 
     /**
@@ -66,6 +72,10 @@ class User extends Authenticatable
 
     public function scopeAdmins($query){
         return $query->where('level', '>', 5);
+    }
+
+    public function getAdminAttribute(){
+        return ($this->attributes['level'] > 5 ? true : false);
     }
 
 }

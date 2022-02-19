@@ -140,6 +140,10 @@ class UserController extends Controller
                 echo "<hr>";
             }
         }
+
+        $users = User::all();
+        dd($users->toArray());
+        //dd($users->toJson(JSON_PRETTY_PRINT));
     }
 
     /**
